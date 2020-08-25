@@ -1,0 +1,22 @@
+Package: perf.jmeter.reporter
+Title: PKG_TITLE
+Version: 0.0.0.9000
+Authors@R: person('AUTHOR_FIRST', 'AUTHOR_LAST', email = 'AUTHOR@MAIL.COM', role = c('cre', 'aut'))
+Description: PKG_DESC.
+License: MIT + file LICENSE
+Imports: 
+    config,
+    golem,
+    shiny,
+    processx,
+    attempt,
+    DT,
+    glue,
+    htmltools
+Encoding: UTF-8
+LazyData: true
+RoxygenNote: 7.1.1
+URL: https://github.com/nikkrichko/perf.jmeter.reporter
+BugReports: https://github.com/nikkrichko/perf.jmeter.reporter/issues
+Suggests: 
+    testthat
