@@ -9,11 +9,11 @@ app_ui <- function(request) {
     # Leave this function for adding external resources
     golem_add_external_resources(),
     # List the first level UI elements here 
-    # fluidPage(
-    #   h1("perf.jmeter.reporter")
-    # )
-    
-    mod_upload_jtl_file_ui("upload_jtl_file_ui_1")
+    fluidPage(
+      mod_upload_jtl_file_ui("upload_jtl_file_ui_1")
+    )
+
+    # mod_upload_jtl_file_ui("upload_jtl_file_ui_1")
   )
 }
 

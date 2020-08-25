@@ -76,6 +76,7 @@ mod_upload_jtl_file_server <- function(input, output, session){
   library(esquisse)
   library(shinycssloaders)
   library(lubridate)
+  options(scipen = 99999)
   ns <- session$ns
 
                  # output$uploaded_contents <- renderTable({
