@@ -1,26 +1,36 @@
+---
+output: github_document
+---
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-> For commercial use contact with me: <nik.krichko@gmail.com>
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "man/figures/README-",
+  out.width = "100%"
+)
+```
+
+> For commercial use contact with me: nik.krichko@gmail.com
 
 # perf.jmeter.reporter
-
 Package provide simple process analyze jemter perforamance results
 
 <!-- badges: start -->
-
 <!-- badges: end -->
 
-The goal of perf.jmeter.reporter is to …
+The goal of perf.jmeter.reporter is to ...
 
 ## Installation
 
-You can install the released version of perf.jmeter.reporter from
-[CRAN](https://CRAN.R-project.org) with:
+You can install the released version of perf.jmeter.reporter from [CRAN](https://CRAN.R-project.org) with:
 
 ``` r
 ###install.packages("perf.jmeter.reporter")
 maybe in future but now only dev version from github
+
 
 
 
@@ -35,12 +45,11 @@ devtools::install_github("nikkrichko/perf.jmeter.reporter")
 #install.packages("remotes")
 remotes::install_github("nikkrichko/perf.jmeter.reporter")
 ```
-
 ## Example
 
 This is a basic example which shows you how to solve a common problem:
 
-``` r
+```{r example}
 library(perf.jmeter.reporter)
 ## basic example code
 ## add in future
