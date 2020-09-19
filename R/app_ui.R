@@ -9,10 +9,39 @@ app_ui <- function(request) {
     # Leave this function for adding external resources
     golem_add_external_resources(),
     # List the first level UI elements here 
+    # fluidPage(
+    #   mod_upload_jtl_file_ui("upload_jtl_file_ui_1")
+    # )
+    
+    
     fluidPage(
-      mod_upload_jtl_file_ui("upload_jtl_file_ui_1")
+      titlePanel("opening web pages"),
+      tabsetPanel(id = "tabs",
+                  ### tab UPLOAD file ------------------------
+                  tabPanel("UPLOAD file",
+                           mod_upload_jtl_file_ui("upload_jtl_file_ui_1")
+                           
+                  ),
+                  ### tab Small report ------------------------
+                  tabPanel("Small report",
+                           mod_render_report_ui("render_report_ui_1")
+                  ),
+                  ### tab Esquisse graph generator ------------------------
+                  tabPanel("Esquisse graph generator",
+                           h2("esquisse"),
+                           esquisserUI(
+                             id = "esquisse",
+                             header = FALSE,
+                             disable_filters = FALSE
+                           )
+                  )
+                  ### closing braces ----------------------
+                  
+      )
     )
-
+    
+    
+      
     # mod_upload_jtl_file_ui("upload_jtl_file_ui_1")
   )
 }

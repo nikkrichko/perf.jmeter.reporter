@@ -1,0 +1,253 @@
+---
+title: "Performance testing report"
+output: 
+  html_document:
+    toc: true
+    css: rmd.css
+params: 
+  input_file_path: !r NULL
+  input_data_table: !r result_data #report.preprocessing::jdt_dirty
+---
+
+
+<script src="hideOutput.js"></script>
+<script src="rmd.css"></script>
+
+```{r setup, echo=FALSE, include=FALSE}
+library(report.preprocessing)
+library(data.table)
+library(downloadthis)
+
+knitr::knit_hooks$set(drop1=function(before, options, envir) {
+    if (before) {
+        paste(
+            '<p>',
+'<button class="btn btn-primary collapsed" data-toggle="collapse" data-target="#ce1"> SHOW DETAILS',
+'</button>',
+'</p>',
+'<div class="collapse" id="ce1">',
+'<div class="card card-body">',  sep = "\n")
+    } else {
+        paste("</div>", "</div>", sep = "\n")
+    }
+})
+
+
+
+options(scipen = 99999)
+knitr::opts_chunk$set(echo = TRUE)
+report.preprocessing::jdt_dirty
+# rdt <- report.preprocessing::clean_jmeter_log(report.preprocessing::jdt_dirty)
+```
+
+
+# Summary statistics
+
+```{r cleaning_input_data, echo=FALSE, results='asis'}
+
+
+cat("\n")
+# cat("## PARAMETERS")
+cat("\n")
+cat('<div class="fold o"># Aggregated table\n<pre>')
+# print(paste("input_file_path: ",params$input_file_path))
+# print(paste("input_data_table: ",deparse(substitute(params$input_data_table))))
+
+cat('\n</pre></div>')
+
+
+
+if(!is.null(params$input_file_path)){
+  dt <- fread(params$input_file_path)
+  jdt <- clean_jmeter_log(dt)
+} else if (!is.null(params$input_data_table)){
+  jdt <- clean_jmeter_log(params$input_data_table,
+                          delete_ending_digets = FALSE,
+                          delete_words_from_labels = NULL,
+                          labels_to_delete_list = NULL
+                          )
+
+}
+
+
+```
+
+```{r get agregated table,results = 'asis',echo=FALSE}
+aggregated_dt <- get_aggregate_table(jdt)
+knitr::kable(aggregated_dt)
+```
+
+
+
+### Aggregated tables with load groups {.tabset}
+
+```{r Aggregated_tables_with_load_groups, results = 'asis',echo=FALSE}
+
+
+for(input_request_name in unique(jdt$request_name)){
+  # aggregated_dt_2 <- get_aggregate_table(jdt[request_name == input_request_name], TRUE)
+  # print(i)
+  # print(aggregated_dt_2)
+  cat("#### ", input_request_name, "\n")
+  
+  cat(print(knitr::kable(report.preprocessing::get_aggregate_table(jdt[request_name == input_request_name], TRUE))))
+  
+  cat("\n")
+  cat("\n")
+}
+
+```
+
+# Response times 
+
+
+### Tabbed Example {.tabset}
+
+```{r respose_times_boxplots, results = 'asis',echo=FALSE}
+for (request_name in unique(jdt$request_name)){
+  cat("#### ", request_name, "\n")
+
+  cat(knitr::knit_print(report.preprocessing::get_response_time_box_plot_vs_threads(jdt,
+                                                               scenario_name=NULL,
+                                                               input_request_name=request_name,
+                                                               group_by_label=FALSE,
+                                                               interactive=TRUE,
+                                                               split_by_responseCode=FALSE)))
+  cat("\n")
+  cat("\n")
+}
+```
+
+
+## Response time point plots {.tabset .tabset-fade}
+
+Response overview for all requests
+
+### Response time static
+
+plot description
+
+```{r Response_time_not_interactinve, echo=FALSE, fig.width=12, fig.height=8}
+report.preprocessing::get_response_time_plot(jdt)
+```
+
+### Response time interactive
+
+plot description and how to use it
+
+
+```{r Response_time_interactinve, echo=FALSE, fig.width=12, fig.height=8, results='asis'}
+# rdt <- report.preprocessing::clean_jmeter_log(report.preprocessing::jdt_dirty)
+report.preprocessing::get_response_time_plot(jdt, interactive = TRUE)
+```
+
+
+
+
+# Response times detailed
+
+### Tabbed Example {.tabset}
+
+```{r respose_times_point_plot_errors, fig.width=14, fig.height=10,results = 'asis',echo=FALSE}
+for (request_name in unique(jdt$request_name)){
+  cat("#### ", request_name, "\n")
+
+  cat(knitr::knit_print(report.preprocessing::get_response_times_with_errors_plot(jdt,
+                                                                                  scenario_name=request_name,
+                                                                                  group_by_label=FALSE,
+                                                                                  interactive=TRUE)
+                        )
+      )
+  
+
+  
+  cat("\n")
+  cat("\n")
+}
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- <details><summary>Response time (quantiles)</summary> -->
+
+## Response time bar plot (quantiles) {.tabset .tabset-fade}
+
+### Response time static
+
+<details><summary>Response time static (quantiles)</summary>
+```{r Response_time_quantile_not_interactinve, echo=FALSE, fig.width=12, fig.height=8}
+report.preprocessing::get_bar_quantile_plot(jdt)
+```
+</details>
+
+### Response time interactive
+<details><summary>Response time interactive (quantiles)</summary>
+```{r Response_time_quantile_interactinve, echo=FALSE, fig.width=12, fig.height=8, results='asis'}
+
+report.preprocessing::get_bar_quantile_plot(jdt, interactive = TRUE)
+```
+</details>
+</details>
+
+<!-- ## title after tabs  -->
+<!-- content below tabbed region -->
+
+
+<!-- ## R Markdown -->
+
+<!-- This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>. -->
+
+<!-- When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this: -->
+
+<!-- ## playing with DROP -->
+<!-- ```{r cars,drop1=TRUE} -->
+<!-- summary(cars) -->
+<!-- ``` -->
+
+
+<!-- <div class="fold o"># CARS summary -->
+<!-- ```{r cars2, echo=FALSE} -->
+<!--   summary(cars) -->
+<!-- ``` -->
+<!-- </div> -->
+
+
+<!-- <div class="fold o"># CARS summary -->
+<!-- ```{r cars3, echo=FALSE} -->
+<!--   knitr::kable(cars) -->
+<!-- ``` -->
+<!-- </div> -->
+
+
+<!-- <details><summary>Click here</summary> -->
+<!-- #Some text -->
+
+<!-- ```{r code} -->
+<!-- # even code -->
+<!-- print("Hello world!") -->
+<!-- ``` -->
+<!-- </details> -->
+
+
+<!-- ## Including Plots -->
+
+<!-- You can also embed plots, for example: -->
+
+<!-- ```{r pressure, echo=FALSE} -->
+<!-- plot(pressure) -->
+<!-- ``` -->
+
+<!-- Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot. -->

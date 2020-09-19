@@ -8,6 +8,7 @@
 #'
 #' @importFrom shiny NS tagList 
 mod_upload_jtl_file_ui <- function(id, label="something"){
+  library(esquisse)
   ns <- NS(id)
   tagList(
     sidebarPanel(
@@ -76,6 +77,7 @@ mod_upload_jtl_file_server <- function(input, output, session){
   library(esquisse)
   library(shinycssloaders)
   library(lubridate)
+  library(report.preprocessing)
   options(scipen = 99999)
   ns <- session$ns
 
@@ -179,7 +181,7 @@ mod_upload_jtl_file_server <- function(input, output, session){
                  output$uploaded_contents <- renderDataTable({
                    # print("RENDER DATA TABLE function ------------")
                    
-                   data <- temp$data()
+                   data <- temp$data() %>% as.data.table()
                    
                    ### display only head or all
                    if(input$head_display == "head"){
@@ -210,7 +212,7 @@ mod_upload_jtl_file_server <- function(input, output, session){
                    }
                    if(temp$end_with_preparation){
                      # print("Assigning results data ++++++++++++++++++++++++++++++++")
-                     result_data<-data
+                     result_data <- data %>% as.data.table()
                      result_data[,":="("request_name"=label)]
                      result_data[,":="("response_time"=round(elapsed))]
                      
