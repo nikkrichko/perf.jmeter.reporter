@@ -45,5 +45,3 @@ library(perf.jmeter.reporter)
 ## basic example code
 ## add in future
 ```
-
-test pr
