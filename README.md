@@ -40,8 +40,4 @@ remotes::install_github("nikkrichko/perf.jmeter.reporter")
 
 This is a basic example which shows you how to solve a common problem:
 
-``` r
-library(perf.jmeter.reporter)
-## basic example code
-## add in future
-```
+> perf.jmeter.reporter::run\_app()

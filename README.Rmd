@@ -49,9 +49,13 @@ remotes::install_github("nikkrichko/perf.jmeter.reporter")
 
 This is a basic example which shows you how to solve a common problem:
 
-```{r example}
+```{r example, echo=FALSE,  results='asis'}
 library(perf.jmeter.reporter)
-## basic example code
+## run shiny application
+cat("> perf.jmeter.reporter::run_app()")
+
+
 ## add in future
 ```
+
 
