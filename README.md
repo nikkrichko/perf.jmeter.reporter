@@ -41,3 +41,8 @@ remotes::install_github("nikkrichko/perf.jmeter.reporter")
 This is a basic example which shows you how to solve a common problem:
 
 > perf.jmeter.reporter::run\_app()
+
+```console
+user@terminal:~$ Rscript perf.jmeter.reporter::run\_app()
+it runs
+```
