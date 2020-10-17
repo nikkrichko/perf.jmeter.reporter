@@ -41,7 +41,17 @@ mod_upload_jtl_file_ui <- function(id, label="something"){
                        textInput(inputId=ns("words_to_exclude_text_input"),
                                  "Type words to delete from labels",
                        ),
-                       actionButton(ns("Clean_words_from_labels"), "Clean_words_from_labels",style='width: 100%;color: white; background-color: #008CBA')),
+                       actionButton(ns("Clean_words_from_labels"), "Clean_words_from_labels",style='width: 100%;color: white; background-color: #008CBA'),
+                       ### SLA BUTTON
+                       tags$hr(style='display: inline-block; height: 1px;width: 100%;color: #555555; background-color: #555555'),
+                       textInput(inputId=ns("simple_sla"),
+                                 "Define simple SLA (only numbers)",
+                       ),
+                       actionButton(ns("simple_sla_btn"), "Sefine SLA",
+                                    style='width: 100%;color: white; background-color: #008CBA'),
+                       
+                       
+                       ),
       conditionalPanel(condition = "output.fileUploaded == 'TRUE'",ns = ns,
                        tags$hr(style='display: inline-block; height: 1px;width: 100%;color: #555555; background-color: #555555'),
                        h5("select how many % of request you want to see in report"),
@@ -59,7 +69,7 @@ mod_upload_jtl_file_ui <- function(id, label="something"){
       conditionalPanel( condition = "output.fileUploaded == 'TRUE'",ns = ns,
                         h2("Preview")),
       verbatimTextOutput(ns("list_unique_labels")),
-      dataTableOutput(ns("uploaded_contents"))
+      DT::dataTableOutput(ns("uploaded_contents"))
     )
     
   )
@@ -90,7 +100,8 @@ mod_upload_jtl_file_server <- function(input, output, session){
                                         exclude_filter = '',
                                         exclude_words='',
                                         end_with_preparation=FALSE,
-                                        list_unique_labels='')
+                                        list_unique_labels='',
+                                        simple_sla='')
                  
                  set_exclude_filter_false = function() {
                    # do stuff
@@ -105,6 +116,7 @@ mod_upload_jtl_file_server <- function(input, output, session){
                    temp$exclude_words=''
                    temp$end_with_preparation=FALSE
                    temp$list_unique_labels=''
+                   simple_sla=''
                    # print(input$Jmeter_uploaded_file)
                    input$Jmeter_uploaded_file
                  })
@@ -140,6 +152,11 @@ mod_upload_jtl_file_server <- function(input, output, session){
                  observeEvent(input$Clean_requests, {
                    req(input$Clean_requests)
                    temp$exclude_filter <- input$Upload_jmeter_text_input
+                 })
+                 
+                 observeEvent(input$simple_sla_btn, {
+                   req(input$simple_sla_btn)
+                   temp$simple_sla=input$simple_sla
                  })
                  
                  
@@ -178,7 +195,7 @@ mod_upload_jtl_file_server <- function(input, output, session){
                  }
                  
                  
-                 output$uploaded_contents <- renderDataTable({
+                 output$uploaded_contents <- DT::renderDataTable({
                    # print("RENDER DATA TABLE function ------------")
                    
                    data <- temp$data() %>% as.data.table()
@@ -196,7 +213,8 @@ mod_upload_jtl_file_server <- function(input, output, session){
                        paste(collapse = "|")
                      # print(list_of_words_to_exclude)
                      # print("Clean_requests button was pressed")
-                     data <- data[!grepl(list_of_words_to_exclude, label),]
+                     data <- data[!grepl(list_of_words_to_exclude, label),] 
+                     
                      # temp$exclude_filter <- FALSE
                      
                    }
@@ -261,7 +279,22 @@ mod_upload_jtl_file_server <- function(input, output, session){
                    # print( unique(data$label))
                    temp$list_unique_labels <- unique(data$label)
                    
+                   if(temp$simple_sla != "") {
+                     sla <- as.numeric(temp$simple_sla)
+                     data <- data %>% datatable() %>% 
+                       formatStyle('elapsed', 
+                                   fontWeight = styleInterval(sla, c('normal', 'bold')),
+                                   backgroundColor = styleInterval(sla, 
+                                                                c("", "tomato")),
+                                   color = styleInterval(sla, 
+                                                         c("", "white")), 
+                                   fontSize = styleInterval(sla, 
+                                                            c("", "200%")))
+                        
+                   }
+                   
                    data
+                   
                  })
                  
                  
