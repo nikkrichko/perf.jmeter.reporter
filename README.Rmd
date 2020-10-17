@@ -52,8 +52,10 @@ This is a basic example which shows you how to solve a common problem:
 ```{r example, echo=FALSE,  results='asis'}
 library(perf.jmeter.reporter)
 ## run shiny application
-cat("> perf.jmeter.reporter::run_app()")
-
+cat("\n\n")
+cat("```console\n")
+cat("user@terminal:~$ Rscript perf.jmeter.reporter::run_app()\n")
+cat("```\n")
 
 ## add in future
 ```
