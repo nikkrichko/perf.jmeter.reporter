@@ -14,6 +14,7 @@ app_server <- function( input, output, session ) {
   callModule(mod_upload_jtl_file_server, "upload_jtl_file_ui_1")
   
   data_r <- reactiveValues(data = "", name = "")
+  transfer_sla1 <- reactiveValues(sla="")
   
   observeEvent(input$tabs, {
     if(input$tabs == "Esquisse graph generator" & exists("result_data")){
@@ -31,11 +32,16 @@ app_server <- function( input, output, session ) {
       showNotification("Please wait some moment\nYour report generation ...\nIN PROGRESS....\nFEW MORE MOMENT\nJUST WAIT...",
                        type="warning",duration = 10)
       # render_report_server("small_report",get("result_data") )
-      
-      
+      # browser()
+      print("server module transfer SLA: =====================================")
+      # transfer_sla <- get("transfer_sla")
+      # print(transfer_sla)
+      # transfer_sla1$sla <- transfer_sla
+      # print(transfer_sla)
+      # print(transfer_sla1$sla)
       data_r$data <- result_data
       
-      callModule(mod_render_report_server, "render_report_ui_1",input_dt=data_r$data)
+      callModule(mod_render_report_server, "render_report_ui_1",input_dt=data_r$data, input_sla=transfer_sla)
       
     }
   }

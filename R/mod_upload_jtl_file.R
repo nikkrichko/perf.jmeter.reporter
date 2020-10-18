@@ -275,22 +275,29 @@ mod_upload_jtl_file_server <- function(input, output, session){
                      # result_data <<- result_data[sample(.N,round(NROW(result_data)*10/100))]
                      
                      assign("result_data", result_data)
+                     
                    }
                    # print( unique(data$label))
                    temp$list_unique_labels <- unique(data$label)
                    
                    if(temp$simple_sla != "") {
-                     sla <- as.numeric(temp$simple_sla)
+                     transfer_sla <- as.numeric(temp$simple_sla)
+                     assign("transfer_sla", transfer_sla, envir = .GlobalEnv)
+                     # 
+                     # print(paste("upload module: SLA=",transfer_sla,"====================="))
+                     # print(paste("upload module: transfer_sla=",transfer_sla,"====================="))
                      data <- data %>% datatable() %>% 
                        formatStyle('elapsed', 
-                                   fontWeight = styleInterval(sla, c('normal', 'bold')),
-                                   backgroundColor = styleInterval(sla, 
+                                   fontWeight = styleInterval(transfer_sla, c('normal', 'bold')),
+                                   backgroundColor = styleInterval(transfer_sla, 
                                                                 c("", "tomato")),
-                                   color = styleInterval(sla, 
+                                   color = styleInterval(transfer_sla, 
                                                          c("", "white")), 
-                                   fontSize = styleInterval(sla, 
+                                   fontSize = styleInterval(transfer_sla, 
                                                             c("", "200%")))
                         
+                   } else {
+                     assign("transfer_sla", "", envir = .GlobalEnv)
                    }
                    
                    data

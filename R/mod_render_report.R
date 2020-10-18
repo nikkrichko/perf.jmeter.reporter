@@ -15,7 +15,7 @@ mod_render_report_ui <- function(id){
     fluidPage(
       downloadButton(ns("downloadData"), label = "Download extended report"),
       shiny::actionButton(inputId = ns("gen_report"), label = "Open extended report in new tab"),
-      shinycssloaders::withSpinner(dataTableOutput(ns("aggregated_data_table")),
+      shinycssloaders::withSpinner(DT::dataTableOutput(ns("aggregated_data_table")),
                                    type = getOption("spinner.type", default = 4),
                                    color = getOption("spinner.color", default = "#0275D8"),
                                    size = getOption("spinner.size", default = 1.5))
@@ -28,7 +28,7 @@ mod_render_report_ui <- function(id){
 #' render_report Server Function
 #'
 #' @noRd 
-mod_render_report_server <- function(input, output, session, input_dt){
+mod_render_report_server <- function(input, output, session, input_dt, input_sla=''){
                  ### setup requirement variables
                  myhtmlfilepath <- "C:/temp" # change to your path
                  temp_dir_path <- paste(myhtmlfilepath,"/",sep = "")
@@ -40,18 +40,37 @@ mod_render_report_server <- function(input, output, session, input_dt){
                  # browser()
                  
                  
-                 output$aggregated_data_table <- renderDataTable({
+                 output$aggregated_data_table <- DT::renderDataTable({
                    
                    perf.jmeter.reporter:::generate_report(input_data_table=input_dt,
                                                           output_dir = myhtmlfilepath,
                                                           output_file = temp_file_name)
                    
+                   
+                   
+                   
                    res_aggregated_dt <- report.preprocessing::clean_jmeter_log(input_dt,
                                                                                delete_ending_digets=FALSE,
                                                                                delete_words_from_labels = NULL,
                                                                                labels_to_delete_list=NULL) %>% 
-                   report.preprocessing::get_aggregate_table()
-                   res_aggregated_dt
+                                        report.preprocessing::get_aggregate_table() %>% 
+                                        datatable() 
+                   
+                   if(input_sla != ""){
+                     sla <- input_sla
+                     res_aggregated_dt <- res_aggregated_dt %>% 
+                       formatStyle(c('q99', 'q95', 'q90','AVG','median','minimum'), 
+                                   fontWeight = styleInterval(sla, c('normal', 'bold')),
+                                   backgroundColor = styleInterval(sla, 
+                                                                   c("", "tomato")),
+                                   color = styleInterval(sla, 
+                                                         c("", "white")), 
+                                   fontSize = styleInterval(sla, 
+                                                            c("", "200%")))
+                   }
+                   
+                   
+                   res_aggregated_dt 
                  })
                  
                  
