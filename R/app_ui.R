@@ -53,7 +53,7 @@ app_ui <- function(request) {
 #' 
 #' @import shiny
 #' @import golem
-#' @importFrom golem activate_js favicon bundle_resources
+#' @importFrom golem activate_js favicon
 #' @noRd
 golem_add_external_resources <- function(){
   
@@ -63,7 +63,7 @@ golem_add_external_resources <- function(){
  
   tags$head(
     favicon(),
-    bundle_resources(
+    golem::bundle_resources(
       path = app_sys('app/www'),
       app_title = 'perf.jmeter.reporter'
     )
