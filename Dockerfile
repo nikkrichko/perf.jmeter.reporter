@@ -49,13 +49,18 @@ RUN R -e 'remotes::install_cran("config")'
 RUN R -e 'remotes::install_cran("sodium")'
 RUN R -e 'remotes::install_cran("janitor")'
 RUN R -e 'remotes::install_cran("randomNames")'
+RUN R -e 'remotes::install_cran("downloadthis")'
+RUN R -e 'remotes::install_cran("testthat")'
+RUN pwd
 RUN R -e 'remotes::install_github("paulc91/shinyauthr")'
+RUN R -e 'remotes::install_github("dreamRs/esquisse")'
 RUN R -e 'remotes::install_github("nikkrichko/report.preprocessing")'
+
 RUN R -e 'remotes::install_github("nikkrichko/perf.jmeter.reporter")'
 
 
 
-
+RUN mkdir /app
 EXPOSE 80 443
 
 

@@ -43,3 +43,15 @@ This is a basic example which shows you how to solve a common problem:
 ``` console
 user@terminal:~$ Rscript perf.jmeter.reporter::run_app()
 ```
+
+### Docker container
+
+get and run with docker
+container
+
+``` console
+user@terminal:~$ docker pull nikkrichko/nikkrichko_pub:perf.jmeter.reporter
+user@terminal:~$ docker run -d -p 9999:80 nikkrichko/nikkrichko_pub:perf.jmeter.reporter
+```
+
+open application in browser localhost:8888

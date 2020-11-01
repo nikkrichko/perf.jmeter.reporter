@@ -60,4 +60,15 @@ cat("```\n")
 ## add in future
 ```
 
+### Docker container
+
+get and run with docker container
+```{r docker_example, echo=FALSE,  results='asis'}
+cat("```console\n")
+cat("user@terminal:~$ docker pull nikkrichko/nikkrichko_pub:perf.jmeter.reporter\n")
+cat("user@terminal:~$ docker run -d -p 9999:80 nikkrichko/nikkrichko_pub:perf.jmeter.reporter\n")
+cat("```\n")
+```
+
+open application in browser localhost:8888
 
