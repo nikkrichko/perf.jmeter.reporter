@@ -64,12 +64,11 @@ golem_add_external_resources <- function(){
   
   tags$head(
     favicon(),
-    golem::bundle_resources(
-      path = app_sys('app/www'),
-      app_title = 'perf.jmeter.reporter'
-    )
+    # golem::bundle_resources(
+    #   path = app_sys('app/www'),
+    #   app_title = 'perf.jmeter.reporter'
+    # )
     # Add here other external resources
     # for example, you can add shinyalert::useShinyalert() 
   )
 }
-
