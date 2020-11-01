@@ -30,7 +30,11 @@ mod_render_report_ui <- function(id){
 #' @noRd 
 mod_render_report_server <- function(input, output, session, input_dt, input_sla=''){
                  ### setup requirement variables
-                 myhtmlfilepath <- "C:/temp" # change to your path
+                  if(.Platform$OS.type == "windows") {
+                    myhtmlfilepath <- "C:/temp" # change to your path
+                  } else {
+                    myhtmlfilepath <- "/app"
+                  }
                  temp_dir_path <- paste(myhtmlfilepath,"/",sep = "")
                  temp_file_name <- paste("jtl_input_dt_",format(Sys.time(), "%Y%m%d_%H%M%S"),".html",sep = "")
                  # browser()
